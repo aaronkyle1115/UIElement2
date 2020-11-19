@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/gotoalbum"
+        android:title="Albums">
+    </item>
+
+    <item
+        android:id="@+id/gotoSongs"
+        android:title="Songs"
+        app:showAsAction="always"
+        >
+    </item>
+    <item
+        android:id="@+id/gotoQueue"
+        android:title="Queue"
+
+        >
+
+    </item>
+</menu>

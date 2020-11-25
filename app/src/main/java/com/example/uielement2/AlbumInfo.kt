@@ -1,62 +1,100 @@
 package com.example.uielement2
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.snackbar.Snackbar
 
 class AlbumInfo : AppCompatActivity() {
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_album_info)
-        val intent =  Intent(this, AlbumInfo::class.java)
+        albumlist.clear()
         val name = findViewById<TextView>(R.id.textView2)
         val image = findViewById<ImageView>(R.id.imageView)
         val songListView = findViewById<ListView>(R.id.songList)
-        var album : String? = intent.getStringExtra("album")
 
-
-        when("$album"){
+        when("$albumid"){
             "0" -> {
                 name.text = "Meowment"
-                val albumSong : Array<String> = arrayOf("Meow-rried", "Fur-tunate", "Claw-ful", "Furmidable")
-                val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, (albumSong))
-                songListView.adapter = adapter
+                albumlist.addAll(album1)
                 image.setImageResource(R.drawable.cat)
             }
             "1" -> {
                 name.text = "Purrty Feline"
-                val albumSong : Array<String> = arrayOf("Tails", "Paw-sible", "Hiss-tory", "Paw-don Me")
-                val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, (albumSong))
-                songListView.adapter = adapter
+                albumlist.addAll(album2)
                 image.setImageResource(R.drawable.cat1)
             }
             "2" -> {
                 name.text = "Cat Cobane"
-                val albumSong : Array<String>  = arrayOf("Meow-rried", "Fur-tunate", "Claw-ful", "Furmidable")
-                val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, (albumSong))
-                songListView.adapter = adapter
+                albumlist.addAll(album3)
                 image.setImageResource(R.drawable.cat2)
             }
-            else ->{
-                name.text = "Eh Didn't Work"
-                val albumSong : Array<String>  = arrayOf("I ", "Think", "I'm", "Done")
-                val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, (albumSong))
-                songListView.adapter = adapter
-                image.setImageResource(R.drawable.fail)
-            }
+
         }
 
+        
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, (albumlist))
+        songListView.adapter = adapter
+        registerForContextMenu(songListView)
+
+
+
     }
+
+    fun refresh(){
+        val refreshActivity = intent
+        finish()
+        startActivity(refreshActivity)
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater : MenuInflater = menuInflater
+        inflater.inflate(R.menu.removemenu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item!!.itemId) {
+            R.id.RemoveSong -> {
+                val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+                val builder =AlertDialog.Builder(this)
+                builder.setTitle("Are You Sure?")
+                builder.setMessage("Do you Wish to delete this song from this album?")
+                builder.setPositiveButton("yes",{ dialogInterface: DialogInterface, i: Int ->
+                    when("$albumid"){
+                        "0" -> {
+                            album1.removeAt(info.position)
+                        }
+                        "1" -> {
+                            album2.removeAt(info.position)
+                        }
+                        "2" -> {
+                            album3.removeAt(info.position)
+                        }
+
+                    }
+
+                    refresh()
+                })
+                builder.setNegativeButton("No", { dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.cancel()
+                })
+                builder.show()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
 
 

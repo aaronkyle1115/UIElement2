@@ -3,38 +3,39 @@ package com.example.uielement2
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import java.util.ArrayList
-
-val songArray : Array<String> = arrayOf("Meow-rried", "Fur-tunate", "Claw-ful", "Furmidable"
-    , "Tails", "Paw-sible", "Hiss-tory", "Paw-don Me", "Fur-milliar", "Paw-some", "Fur-get Me", "Cat-astrophe"
-    )
+/*I could have used resource strings but nahhh i dont understand how to use it that well so nahhhh*/
+var songArray : ArrayList<String> = ArrayList()
+var album1 : ArrayList<String> = arrayListOf("Meow-rried", "Fur-tunate", "Claw-ful", "Furmidable")
+var album2 : ArrayList<String> = arrayListOf("Tails", "Paw-sible", "Hiss-tory", "Paw-don Me")
+var album3 : ArrayList<String> = arrayListOf("Fur-milliar", "Paw-some", "Fur-get Me", "Cat-astrophe")
+var albumid : String? = null
 var testList : ArrayList<String> = ArrayList()
-var  tempItem : String? = null
+var albumlist : ArrayList<String> = ArrayList()
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-
+        setUpList()
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, (songArray))
         val songListView = findViewById<ListView>(R.id.songListView)
         songListView.adapter = adapter
         registerForContextMenu(songListView)
-        songListView.setOnItemClickListener { parent, view, position:Int, id ->
-            tempItem = songArray[position]
-            Log.i("Possition", "Possistion $position" )
 
-        }
-
+    }
+    fun setUpList(){
+        songArray.clear()
+        songArray.addAll(album1)
+        songArray.addAll(album2)
+        songArray.addAll(album3)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -48,7 +49,11 @@ class MainActivity : AppCompatActivity() {
             R.id.addToQueue -> {
                 val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
                 testList.add(songArray[info.position])
-                Toast.makeText(applicationContext, "Song Added To Queue", Toast.LENGTH_LONG).show()
+                var snackbar = Snackbar.make(info.targetView, "Song Added to Queue", Snackbar.LENGTH_LONG)
+                snackbar.setAction("Go to Queue", View.OnClickListener {
+                    startActivity(Intent(this, Queue::class.java))
+                })
+                snackbar.show()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

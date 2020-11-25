@@ -76,11 +76,7 @@ class MainActivity2 : AppCompatActivity(), AdapterView.OnItemClickListener{
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
         val intent =  Intent(this, AlbumInfo::class.java)
-        var languageItem:LanguageItem = arrayList!!.get(position)
-        Toast.makeText(applicationContext, "Album Information", Toast.LENGTH_LONG).show()
-        var oneshotbeforigiveup = position
-        Log.i("Possition", "Possistion $position" )
-        intent.putExtra("album", oneshotbeforigiveup)
+        albumid = position.toString()
         startActivity(intent)
 
         }
